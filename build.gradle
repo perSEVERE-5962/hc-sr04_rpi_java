@@ -1,0 +1,118 @@
+plugins {
+   id 'org.hidetake.ssh' version '2.9.0'
+}
+
+apply plugin: 'java'
+
+apply plugin:'application'
+//mainClassName = "hello.HelloWorld"
+
+
+mainClassName = "led.LightController"
+
+repositories {
+   jcenter()
+   maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+
+dependencies {
+  if (project.hasProperty("rpi")){
+  
+  compile  files('C:/Users/0000y/wpilib/raspberryPi/lib/ntcore-java-2019.1.1-beta-2.jar')
+  compile  files('C:/Users/0000y/wpilib/raspberryPi/lib/wpiutil-java-2019.1.1-beta-2.jar')
+  compile files('C:/Users/0000y/wpilib/raspberryPi/lib/ntcore-jni-2019.1.1-beta-2-linuxraspbian.jar')
+  } else {
+    compile  files('C:/Users/0000y/wpilib/java/current/lib/wpiutil.jar')
+    compile  files('C:/Users/0000y/wpilib/java/current/lib/ntcore.jar')
+    compile  files('C:/Users/0000y/wpilib/java/current/lib/ntcore-jni-4.1.0-windowsx86-64.jar')
+ 
+  }
+
+    compile 'com.pi4j:pi4j-core:1.2-SNAPSHOT'
+  testCompile 'junit:junit:4.12'
+}
+tasks.withType(Test) {
+  if(project.hasProperty("rpi")){
+    enabled = false
+  }
+  else{
+	testLogging {
+   		exceptionFormat "full"
+   		events "started", "skipped", "passed", "failed"
+   		showStandardStreams true
+ 	}}
+ 	systemProperty "java.library.path", "C:/Users/0000y/wpilib/java/current/lib"
+}
+
+/*jar {
+   baseName = 'helloworld'
+   version =  '0.1.0'
+   manifest {
+       attributes(
+               'Main-Class': 'hello.HelloWorld'
+       )
+   }
+}*/
+
+
+jar {
+   baseName = 'test'
+   version =  '0.1.0'
+   manifest {
+       attributes(
+               'Main-Class': 'led.LightController'
+       )
+   }
+}
+
+
+remotes {
+ raspberryPi {
+   host = '10.99.99.109'
+   user = 'pi'
+   password = 'G0r0b0t'
+ }
+}
+
+task deploy (dependsOn: 'test'){
+ doLast {
+   ssh.run {
+     session(remotes.raspberryPi) {
+       put from: 'build/libs/helloworld-0.1.0.jar', into: '.'
+       execute 'java -Djava.library.path=lib -jar helloworld-0.1.0.jar'
+     }
+   }
+ }
+}
+
+
+task poweroff(){
+  doLast{
+    ssh.run{
+      session(remotes.raspberryPi){
+        execute 'sudo poweroff'
+      
+      }
+    }
+  }
+}
+
+
+task bundleJar (type: Jar) {
+   baseName = 'helloworld'
+   version =  '0.1.0'
+   manifest {
+       attributes(
+               'Main-Class': 'led.LightController'
+       )
+   }
+   from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+   with jar
+}
+
+
+
+jar.dependsOn bundleJar
+
+
