@@ -1,1 +1,1 @@
-# hc-sr04_rpi_java
+HC-SR04 template project for preseason training
