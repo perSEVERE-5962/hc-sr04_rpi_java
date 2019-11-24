@@ -6,6 +6,13 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.RaspiPin;
 
+/**
+ * 
+ * This code was based on the following:
+ * https://github.com/oksbwn/Ultrasonic-Sesnor-With-Raspberry-Pi
+ * 
+ */
+
 public class Ultrasonic {
     // GPIO Pins
     private static GpioPinDigitalOutput sensorTriggerPin;
