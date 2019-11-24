@@ -1,0 +1,34 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+apply plugin:'application'
+mainClassName = "hc-sr04.Ultrasonic"
+
+dependencies {
+    compile files('/home/dlemasurier/frc2019/lib/ntcore-java-4.0.0.jar')
+    compile files('/home/dlemasurier/frc2019/lib/ntcore-jni-4.0.0-all.jar')
+    compile files('/home/dlemasurier/frc2019/lib/wpiutil-java-3.0.0.jar')
+    compile 'com.pi4j:pi4j-core:1.2-SNAPSHOT'
+}
+
+task bundleJar (type: Jar) {
+    baseName = 'hc-sr04'
+    version = '0.1.0'
+    manifest {
+        attributes (
+            'Main-Class': 'hc-sr04.Ultrasonic'
+
+        )
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }}
+    with jar
+}
+jar.dependsOn bundleJar
+
+
+
+
