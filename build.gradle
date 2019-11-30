@@ -1,4 +1,6 @@
 apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     jcenter()
@@ -6,7 +8,7 @@ repositories {
 }
 
 apply plugin:'application'
-mainClassName = "hc-sr04.Ultrasonic"
+mainClassName = "hcsr04.Ultrasonic"
 
 dependencies {
     compile files('/home/dlemasurier/frc2019/lib/ntcore-java-4.0.0.jar')
@@ -20,7 +22,7 @@ task bundleJar (type: Jar) {
     version = '0.1.0'
     manifest {
         attributes (
-            'Main-Class': 'hc-sr04.Ultrasonic'
+            'Main-Class': 'hcsr04.Ultrasonic'
 
         )
     }
