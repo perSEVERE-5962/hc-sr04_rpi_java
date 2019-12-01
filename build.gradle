@@ -11,9 +11,15 @@ apply plugin:'application'
 mainClassName = "hcsr04.Ultrasonic"
 
 dependencies {
+<<<<<<< Updated upstream
     compile files('c:/Users/Public/frc2019/lib/wpiutil.jar')
     compile files('c:/Users/Public/frc2019/lib/ntcore.jar') 
     compile files('c:/Users/Public/frc2019/lib/ntcore-jni.jar')
+=======
+    compile files('dependencies/ntcore-java-4.0.0.jar')
+    compile files('dependencies/ntcore-jni-4.0.0-all.jar')
+    compile files('dependencies/wpiutil-java-3.0.0.jar')
+>>>>>>> Stashed changes
     compile 'com.pi4j:pi4j-core:1.2-SNAPSHOT'
 }
 
